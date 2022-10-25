@@ -15,7 +15,10 @@ const Header = () => {
     if (e.key === "Enter") {
       setInputValue(value);
       setValue("");
+      return;
     }
+
+    const searchValue = e.target.value;
   };
 
   return (

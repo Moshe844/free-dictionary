@@ -1,0 +1,9 @@
+.borders {
+  background-color: rgba(214, 209, 209, 0.459);
+  border-radius: 16px;
+  padding-left: 50px;
+}
+
+.centering {
+  margin-right: 15vh;
+}
