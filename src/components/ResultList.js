@@ -46,6 +46,14 @@ const ResultList = () => {
     );
   }
 
+  if (inputValue === "") {
+    return (
+      <h3 className=" centering animate-pulse text-center mt-10 font-semibold text-gray-500">
+        Please enter enter a word to start...👆
+      </h3>
+    );
+  }
+
   if (error) {
     return (
       <h3 className="text-center mt-10 font-semibold text-gray-500">
@@ -54,13 +62,6 @@ const ResultList = () => {
     );
   }
 
-  if (inputValue === "") {
-    return (
-      <h3 className=" centering animate-pulse text-center mt-10 font-semibold text-gray-500">
-        Please enter enter a word to start...👆
-      </h3>
-    );
-  }
   return (
     <div className="container mx-auto p-4 max-w-2xl">
       {response && (

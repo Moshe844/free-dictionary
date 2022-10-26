@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import { InputContext } from "../App";
+import useAutoSuggest from "react-use-autosuggest";
 
 const Header = () => {
   const [value, setValue] = useState("");
@@ -17,8 +18,6 @@ const Header = () => {
       setValue("");
       return;
     }
-
-    const searchValue = e.target.value;
   };
 
   return (
