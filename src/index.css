@@ -17,3 +17,12 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.word-suggestion-dropdown-item {
+  transition: background 0.3s;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+.word-suggestion-dropdown-item:hover {
+  background: rgb(128, 174, 190);
+}

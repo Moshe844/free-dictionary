@@ -1,79 +1,82 @@
-import { useContext, useState } from 'react';
-import { InputContext } from '../App';
-import useAutoSuggest from 'react-use-autosuggest';
-import WordItem from './WordItem';
+import { useContext, useState } from "react";
+import { InputContext } from "../App";
+import { getWordSuggestions } from "../api/getWordSuggestions";
+import WordItem from "./WordItem";
 
 const Header = () => {
-  const [value, setValue] = useState('');
-  const [autoData, setAutoData] = useState(['hay ']);
+  const [value, setValue] = useState("");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [searchSuggestions, setSearchSuggestions] = useState([]);
   const { inputValue, setInputValue } = useContext(InputContext);
 
-  const getAutoData = async () => {
-    const d = [];
-    const res = await fetch(`https://api.datamuse.com/words?sp=${value}*&max=10`);
-    const data = await res.json();
-    console.log('data', data);
-    data.map(({ word }) => d.push(word));
-    console.log(d);
-    setAutoData(d);
+  const handleSubmit = (word) => {
+    setInputValue(word);
+    setValue("");
+    setSearchSuggestions([]);
+    setIsDropdownOpen(false);
   };
 
-  const handleInputChange = (e) => {
-    ///////////
-    setInputValue(e.target.value);
-    ////////////////
-
+  // On change of search field
+  const handleInputChange = async (e) => {
     setValue(e.target.value);
-    getAutoData();
+    const suggestions = await getWordSuggestions(e.target.value);
+
+    setSearchSuggestions(suggestions);
   };
 
-  const handleSubmit = () => {
-    setInputValue(value);
-    setValue('');
-  };
+  // To submit the form
+  const handleShowResult = (e) => {
+    e.preventDefault();
+    // if (!value) return;
 
-  const handleInputKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      setInputValue(value);
-      setValue('');
-      return;
-    }
+    handleSubmit(value);
   };
 
   return (
     <div className="bg-gray-700">
       <div className="container mx auto py-8">
-        <h1 className="text-3xl font-bold text-center text-white">My Free Dictionary</h1>
+        <h1 className="text-3xl font-bold text-center text-white">
+          My Free Dictionary
+        </h1>
         <p className="text-center mt-1 mb-10 text-white text-lg">
           Find Definitions for word
         </p>
 
         <div className="flex itmes-center justify-center mt-5">
-          <div className="LOOK relative flex border-2 border-gray-200 rounded">
+          <form
+            className="LOOK relative flex border-2 border-gray-200 rounded"
+            onSubmit={handleShowResult}
+          >
             <input
               className="px-4 py-2 md:w-80"
               type="text"
               placeholder="Search.."
               onChange={handleInputChange}
               value={value}
-              onKeyDown={handleInputKeyDown}
+              onFocus={() => setIsDropdownOpen(true)}
             />
-            <button
-              className="bg-blue-400 border-l px-4 py-2 text-white"
-              onClick={handleSubmit}
-            >
+            <button className="bg-blue-400 border-l px-4 py-2 text-white">
               Search
             </button>
-            <div className="should-be-in-a-container absolute top-full bg-gray-50 w-full">
-              {autoData.map((word) => {
-                return <WordItem key={word} word={word} />;
-              })}
-            </div>
-          </div>
+            {isDropdownOpen === true && (
+              <div className="word-suggestion-dropdown should-be-in-a-container absolute top-full bg-gray-50 w-full z-10">
+                {searchSuggestions.map((word) => {
+                  return (
+                    <WordItem
+                      key={word}
+                      word={word}
+                      handleClick={handleSubmit}
+                    />
+                  );
+                })}
+              </div>
+            )}
+          </form>
         </div>
         {inputValue && (
           <h3 className="text-gray-50 text-center mt-4">
-            Results for: <span className="text-white font-bold">{inputValue}</span>
+            Results for:{" "}
+            <span className="text-white font-bold">{inputValue}</span>
           </h3>
         )}
       </div>

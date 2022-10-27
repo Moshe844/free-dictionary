@@ -2,6 +2,8 @@
   background-color: rgba(214, 209, 209, 0.459);
   border-radius: 16px;
   padding-left: 50px;
+  padding: 2rem;
+  margin: 2rem 0;
 }
 
 .centering {
