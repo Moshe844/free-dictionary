@@ -1,21 +1,38 @@
-import { useContext, useState } from "react";
-import { InputContext } from "../App";
-import useAutoSuggest from "react-use-autosuggest";
+import { useContext, useState } from 'react';
+import { InputContext } from '../App';
+import useAutoSuggest from 'react-use-autosuggest';
 
 const Header = () => {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState('');
+  const [autoData, setAutoData] = useState(['hay ']);
   const { inputValue, setInputValue } = useContext(InputContext);
 
-  const handleInputChange = (e) => setValue(e.target.value);
+  const getAutoData = async () => {
+    const d = [];
+    const res = await fetch(
+      `https://api.datamuse.com/words?sp=${value}*&max=10`
+    );
+    const data = await res.json();
+    console.log('data', data);
+    data.map(({ word }) => d.push(word));
+    console.log(d);
+    setAutoData(d);
+  };
+
+  const handleInputChange = (e) => {
+    setValue(e.target.value);
+    getAutoData();
+  };
+
   const handleSubmit = () => {
     setInputValue(value);
-    setValue("");
+    setValue('');
   };
 
   const handleInputKeyDown = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       setInputValue(value);
-      setValue("");
+      setValue('');
       return;
     }
   };
@@ -46,11 +63,14 @@ const Header = () => {
             >
               Search
             </button>
+            {autoData.map((word) => (
+              <div>{word}</div>
+            ))}
           </div>
         </div>
         {inputValue && (
           <h3 className="text-gray-50 text-center mt-4">
-            Results for:{" "}
+            Results for:{' '}
             <span className="text-white font-bold">{inputValue}</span>
           </h3>
         )}
