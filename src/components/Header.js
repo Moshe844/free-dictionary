@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react';
 import { InputContext } from '../App';
 import useAutoSuggest from 'react-use-autosuggest';
+import WordItem from './WordItem';
 
 const Header = () => {
   const [value, setValue] = useState('');
@@ -9,9 +10,7 @@ const Header = () => {
 
   const getAutoData = async () => {
     const d = [];
-    const res = await fetch(
-      `https://api.datamuse.com/words?sp=${value}*&max=10`
-    );
+    const res = await fetch(`https://api.datamuse.com/words?sp=${value}*&max=10`);
     const data = await res.json();
     console.log('data', data);
     data.map(({ word }) => d.push(word));
@@ -20,6 +19,10 @@ const Header = () => {
   };
 
   const handleInputChange = (e) => {
+    ///////////
+    setInputValue(e.target.value);
+    ////////////////
+
     setValue(e.target.value);
     getAutoData();
   };
@@ -40,15 +43,13 @@ const Header = () => {
   return (
     <div className="bg-gray-700">
       <div className="container mx auto py-8">
-        <h1 className="text-3xl font-bold text-center text-white">
-          My Free Dictionary
-        </h1>
+        <h1 className="text-3xl font-bold text-center text-white">My Free Dictionary</h1>
         <p className="text-center mt-1 mb-10 text-white text-lg">
           Find Definitions for word
         </p>
 
         <div className="flex itmes-center justify-center mt-5">
-          <div className="flex border-2 border-gray-200 rounded">
+          <div className="LOOK relative flex border-2 border-gray-200 rounded">
             <input
               className="px-4 py-2 md:w-80"
               type="text"
@@ -63,15 +64,16 @@ const Header = () => {
             >
               Search
             </button>
-            {autoData.map((word) => (
-              <div>{word}</div>
-            ))}
+            <div className="should-be-in-a-container absolute top-full bg-gray-50 w-full">
+              {autoData.map((word) => {
+                return <WordItem key={word} word={word} />;
+              })}
+            </div>
           </div>
         </div>
         {inputValue && (
           <h3 className="text-gray-50 text-center mt-4">
-            Results for:{' '}
-            <span className="text-white font-bold">{inputValue}</span>
+            Results for: <span className="text-white font-bold">{inputValue}</span>
           </h3>
         )}
       </div>
