@@ -52,6 +52,7 @@ const Header = () => {
             className="LOOK relative flex border-2 border-gray-200 rounded"
             onSubmit={handleShowResult}
             onFocus={() => setInputValue(false)}
+            onBlur={() => setIsDropdownOpen(false)}
           >
             <input
               className="px-4 py-2 md:w-80"
