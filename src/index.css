@@ -25,4 +25,5 @@ code {
 }
 .word-suggestion-dropdown-item:hover {
   background: rgb(128, 174, 190);
+  display: block;
 }

@@ -5,7 +5,7 @@ import WordItem from "./WordItem";
 
 const Header = () => {
   const [value, setValue] = useState("");
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(true);
   const [searchSuggestions, setSearchSuggestions] = useState([]);
   const { inputValue, setInputValue } = useContext(InputContext);
 
@@ -13,11 +13,16 @@ const Header = () => {
     setInputValue(word);
     setValue("");
     setSearchSuggestions([]);
-    setIsDropdownOpen(false);
+    setIsDropdownOpen(true);
   };
 
   // On change of search field
   const handleInputChange = async (e) => {
+    if (!e.target.value) {
+      setIsDropdownOpen(false);
+    } else if (e.target.value) {
+      setIsDropdownOpen(true);
+    }
     setValue(e.target.value);
     const suggestions = await getWordSuggestions(e.target.value);
 
@@ -46,6 +51,7 @@ const Header = () => {
           <form
             className="LOOK relative flex border-2 border-gray-200 rounded"
             onSubmit={handleShowResult}
+            onFocus={() => setInputValue(false)}
           >
             <input
               className="px-4 py-2 md:w-80"
@@ -53,7 +59,6 @@ const Header = () => {
               placeholder="Search.."
               onChange={handleInputChange}
               value={value}
-              onFocus={() => setIsDropdownOpen(true)}
             />
             <button className="bg-blue-400 border-l px-4 py-2 text-white">
               Search
