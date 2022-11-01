@@ -2,17 +2,24 @@ import { useContext, useState } from "react";
 import { InputContext } from "../App";
 import { getWordSuggestions } from "../api/getWordSuggestions";
 import WordItem from "./WordItem";
+// import { Link } from "react-router-dom";
 
 const Header = () => {
   const [value, setValue] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(true);
-  const [searchSuggestions, setSearchSuggestions] = useState([]);
+  const [searchSuggestions, setSearchSuggestions] = useState({
+    suggestions: [],
+    suggestionsState: [],
+  });
   const { inputValue, setInputValue } = useContext(InputContext);
 
   const handleSubmit = (word) => {
     setInputValue(word);
     setValue("");
-    setSearchSuggestions([]);
+    setSearchSuggestions({
+      suggestions: [],
+      suggestionsState: [],
+    });
     setIsDropdownOpen(true);
   };
 
@@ -25,8 +32,33 @@ const Header = () => {
     }
     setValue(e.target.value);
     const suggestions = await getWordSuggestions(e.target.value);
-
-    setSearchSuggestions(suggestions);
+    const suggestionsState = Array(suggestions.length).fill("inActive");
+    let onArrowPress = 0;
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowDown") {
+        if (typeof suggestionsState[onArrowPress + 1] !== "undefined") {
+          onArrowPress++;
+          suggestionsState[onArrowPress] = "active";
+          if (onArrowPress - 1 >= 0) {
+            suggestionsState[onArrowPress - 1] = "inActive";
+          }
+        }
+      }
+      if (e.key === "ArrowUp") {
+        if (typeof suggestionsState[onArrowPress - 1] !== "undefined") {
+          onArrowPress--;
+          suggestionsState[onArrowPress] = "active";
+          if (onArrowPress + 1 >= 0) {
+            suggestionsState[onArrowPress + 1] = "inActive";
+          }
+        }
+      }
+      setSearchSuggestions({
+        suggestions: suggestions,
+        suggestionsState: suggestionsState,
+        setInputValue: setInputValue,
+      });
+    });
   };
 
   // To submit the form
@@ -66,11 +98,14 @@ const Header = () => {
             </button>
             {isDropdownOpen === true && (
               <div className="word-suggestion-dropdown should-be-in-a-container absolute top-full bg-gray-50 w-full z-10">
-                {searchSuggestions.map((word) => {
+                {searchSuggestions.suggestions.map((word, onArrowPress) => {
                   return (
                     <WordItem
                       key={word}
                       word={word}
+                      addedClassname={
+                        searchSuggestions.suggestionsState[onArrowPress]
+                      }
                       handleClick={handleSubmit}
                     />
                   );

@@ -13,7 +13,7 @@ const Synonym = ({ mean }) => {
   return (
     <div className="columns-2 md:columns-3">
       {synonyms.map((syn) => (
-        <li>{syn}</li>
+        <li key={syn.synonyms}>{syn}</li>
       ))}
     </div>
   );

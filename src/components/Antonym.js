@@ -12,8 +12,8 @@ const Antonym = ({ mean }) => {
 
   return (
     <div className="columns-2 md:columns-3">
-      {antonyms.map((syn) => (
-        <li>{syn}</li>
+      {antonyms.map((ant) => (
+        <li key={ant.antonyms}>{ant}</li>
       ))}
     </div>
   );

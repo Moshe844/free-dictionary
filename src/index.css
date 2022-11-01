@@ -27,3 +27,7 @@ code {
   background: rgb(128, 174, 190);
   display: block;
 }
+.word-suggestion-dropdown-item.active {
+  background: rgb(128, 174, 190);
+  display: block;
+}
