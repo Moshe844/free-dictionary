@@ -1,5 +1,6 @@
 const MeaningsList = ({ mean }) => {
   console.log(mean);
+  console.log("testing");
   return (
     <div>
       {mean.map((val) =>
