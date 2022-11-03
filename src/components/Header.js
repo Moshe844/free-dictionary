@@ -1,8 +1,8 @@
-import { useContext, useState } from "react";
-import { InputContext } from "../App";
+import { useContext, useEffect, useState } from "react";
+import { InputContext } from "../Context/Input.context";
 import { getWordSuggestions } from "../api/getWordSuggestions";
 import WordItem from "./WordItem";
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const [value, setValue] = useState("");
@@ -14,7 +14,8 @@ const Header = () => {
   const { inputValue, setInputValue } = useContext(InputContext);
 
   const handleSubmit = (word) => {
-    setInputValue(word);
+    const index = searchSuggestions.suggestionsState.indexOf("active");
+    setInputValue(searchSuggestions.suggestions[index]);
     setValue("");
     setSearchSuggestions({
       suggestions: [],
@@ -25,40 +26,13 @@ const Header = () => {
 
   // On change of search field
   const handleInputChange = async (e) => {
+    console.log(e);
     if (!e.target.value) {
       setIsDropdownOpen(false);
     } else if (e.target.value) {
       setIsDropdownOpen(true);
     }
     setValue(e.target.value);
-    const suggestions = await getWordSuggestions(e.target.value);
-    const suggestionsState = Array(suggestions.length).fill("inActive");
-    let onArrowPress = 0;
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowDown") {
-        if (typeof suggestionsState[onArrowPress + 1] !== "undefined") {
-          onArrowPress++;
-          suggestionsState[onArrowPress] = "active";
-          if (onArrowPress - 1 >= 0) {
-            suggestionsState[onArrowPress - 1] = "inActive";
-          }
-        }
-      }
-      if (e.key === "ArrowUp") {
-        if (typeof suggestionsState[onArrowPress - 1] !== "undefined") {
-          onArrowPress--;
-          suggestionsState[onArrowPress] = "active";
-          if (onArrowPress + 1 >= 0) {
-            suggestionsState[onArrowPress + 1] = "inActive";
-          }
-        }
-      }
-      setSearchSuggestions({
-        suggestions: suggestions,
-        suggestionsState: suggestionsState,
-        setInputValue: setInputValue,
-      });
-    });
   };
 
   // To submit the form
@@ -69,12 +43,54 @@ const Header = () => {
     handleSubmit(value);
   };
 
+  const handleSuggestions = async (value) => {
+    const suggestions = await getWordSuggestions(value);
+    const suggestionsState = Array(suggestions.length).fill("inActive", 1);
+    suggestionsState[0] = "active";
+    setSearchSuggestions({
+      suggestions: suggestions,
+      suggestionsState: suggestionsState,
+    });
+    console.log(suggestions);
+    console.log(suggestionsState);
+    let onArrowPress = 0;
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowDown") {
+        if (typeof suggestionsState[onArrowPress + 1] !== "undefined") {
+          suggestionsState[onArrowPress + 1] = "active";
+          if (onArrowPress >= 0) {
+            suggestionsState[onArrowPress] = "inActive";
+          }
+          onArrowPress++;
+        }
+      }
+      if (e.key === "ArrowUp") {
+        if (typeof suggestionsState[onArrowPress - 1] !== "undefined") {
+          suggestionsState[onArrowPress - 1] = "active";
+          if (onArrowPress - 1 >= 0) {
+            suggestionsState[onArrowPress] = "inActive";
+          }
+          onArrowPress--;
+        }
+      }
+      setSearchSuggestions({
+        suggestions: suggestions,
+        suggestionsState: suggestionsState,
+      });
+    });
+  };
+
+  useEffect(() => {
+    if (value) handleSuggestions(value);
+  }, [value]);
+
   return (
     <div className="bg-gray-700">
       <div className="container mx auto py-8">
-        <h1 className="text-3xl font-bold text-center text-white">
+        {/* <h1 className="text-3xl font-bold text-center text-white">
           My Free Dictionary
-        </h1>
+        </h1> */}
+
         <p className="text-center mt-1 mb-10 text-white text-lg">
           Find Definitions for word
         </p>
@@ -87,7 +103,7 @@ const Header = () => {
             onBlur={() => setIsDropdownOpen(false)}
           >
             <input
-              className="px-4 py-2 md:w-80"
+              className="w-96 px-4 py-2 md:w-80"
               type="text"
               placeholder="Search.."
               onChange={handleInputChange}

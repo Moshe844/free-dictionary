@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { InputContext } from "../App";
+import { InputContext } from "../Context/Input.context";
 import Antonym from "./Antonym";
 import Example from "./Example";
 import MeaningsList from "./MeaningsList";

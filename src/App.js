@@ -1,24 +1,15 @@
-import { createContext, useState } from "react";
-import Header from "./components/Header";
-import ResultList from "./components/ResultList";
+import { Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+// import Login from "./pages/login/Login";
 
-export const InputContext = createContext();
-
-function App() {
-  const [inputValue, setInputValue] = useState("");
-
-  const value = {
-    inputValue,
-    setInputValue,
-  };
+const App = () => {
   return (
-    <InputContext.Provider value={value}>
-      <div className="App">
-        <Header />
-        <ResultList />
-      </div>
-    </InputContext.Provider>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      {/* <Route path="/login" element={<Login />} /> */}
+      <Route path="/register" element={<h1>REGISTER COMPONENT HERE</h1>} />
+    </Routes>
   );
-}
+};
 
 export default App;
