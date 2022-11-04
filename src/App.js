@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-// import Home from "./pages/Home";
+import Home from "./pages/Home";
 import Login from "./pages/login/Login";
 import Profile from "./pages/Profile";
 import Register from "./pages/Register/Register";
@@ -33,6 +33,7 @@ function App() {
             </PrivateRoute>
           }
         />
+        <Route path="/home" element={<Home />}></Route>
         <Route
           path="/login"
           element={
