@@ -24,16 +24,8 @@ function App() {
   return (
     <AuthProvider value={{ currentUser, timeActive, setTimeActive }}>
       <Routes>
-        <Route
-          exact
-          path="/"
-          element={
-            <PrivateRoute>
-              <Profile />
-            </PrivateRoute>
-          }
-        />
-        <Route path="/home" element={<Home />}></Route>
+        <Route path="/" element={<Home />}></Route>
+        <Route path="/profile" element={<Profile />} />
         <Route
           path="/login"
           element={

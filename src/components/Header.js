@@ -110,7 +110,7 @@ const Header = () => {
             onBlur={() => setIsDropdownOpen(false)}
           >
             <input
-              className="w-96 px-4 py-2 md:w-80"
+              className="pw-96 px-4 py-2 md:w-80"
               type="text"
               placeholder="Search.."
               onChange={handleInputChange}
