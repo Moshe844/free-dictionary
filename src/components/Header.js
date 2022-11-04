@@ -3,6 +3,7 @@ import { InputContext } from "../Context/Input.context";
 import { getWordSuggestions } from "../api/getWordSuggestions";
 import WordItem from "./WordItem";
 import { Link } from "react-router-dom";
+import "./Header.css";
 
 const Header = () => {
   const [value, setValue] = useState("");
@@ -94,6 +95,12 @@ const Header = () => {
         <p className="text-center mt-1 mb-10 text-white text-lg">
           Find Definitions for word
         </p>
+        <div className="positioning float-right">
+          <Link to="/login">Login</Link>
+        </div>
+        <div className="float-right">
+          <Link to="/register">Register</Link>
+        </div>
 
         <div className="flex itmes-center justify-center mt-5">
           <form
