@@ -85,14 +85,21 @@ const Header = () => {
     if (value) handleSuggestions(value);
   }, [value]);
 
+  //first fix the position of the login container
+
   return (
     <div className="bg-gray-700">
-      <div className="positioning float-right">
-        <Link to="/login">Login</Link>
+      <div className="nav">
+        <div className="nav-Link">
+          <Link to="/login">Login</Link>
+        </div>
+        <div className="nav-Link">
+          <Link to="/register">Signup</Link>
+        </div>
+
+        <div className="nav-Link">signOut</div>
       </div>
-      <div className="evening float-right">
-        <Link to="/register">Register</Link>
-      </div>
+
       <div className="container mx auto py-8">
         {/* <h1 className="text-3xl font-bold text-center text-white">
           My Free Dictionary

@@ -1,8 +1,19 @@
-.positioning {
-  margin-right: 20px;
-  padding: 5px;
+/* use display flex and postition */
+
+.nav {
+  position: absolute;
+  right: 0;
+  width: 150px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  color: white;
 }
-.evening {
-  margin-right: 15px;
+
+.nav-Link {
   padding: 5px;
+  cursor: pointer;
 }
+
+/* HOW ODES IT LOOK */
