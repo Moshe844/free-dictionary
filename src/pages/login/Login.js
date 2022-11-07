@@ -32,22 +32,24 @@ function Login() {
           navigate("/");
         }
       })
-      .catch((err) => {
-        switch (err.code) {
-          case "auth/wrong-password":
-            setError("Invalid password");
-            break;
+      .catch((err) => setError(err.message));
+    // .catch((err) => {
+    //   switch (err.code) {
 
-          case "auth/user-not-found":
-            setError("Email not found");
-            break;
+    //     case "auth/wrong-password":
+    //       setError("Invalid password");
+    //       break;
 
-          default:
-            console.log(err.message);
-            console.log(err.code);
-            break;
-        }
-      });
+    //     case "auth/user-not-found":
+    //       setError("Email not found");
+    //       break;
+
+    //     default:
+    //       console.log(err.message);
+    //       console.log(err.code);
+    //       break;
+    //   }
+    // });
   };
 
   return (

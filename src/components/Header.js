@@ -87,6 +87,12 @@ const Header = () => {
 
   return (
     <div className="bg-gray-700">
+      <div className="positioning float-right">
+        <Link to="/login">Login</Link>
+      </div>
+      <div className="evening float-right">
+        <Link to="/register">Register</Link>
+      </div>
       <div className="container mx auto py-8">
         {/* <h1 className="text-3xl font-bold text-center text-white">
           My Free Dictionary
@@ -95,12 +101,6 @@ const Header = () => {
         <p className="text-center mt-1 mb-10 text-white text-lg">
           Find Definitions for word
         </p>
-        <div className="positioning float-right">
-          <Link to="/login">Login</Link>
-        </div>
-        <div className="float-right">
-          <Link to="/register">Register</Link>
-        </div>
 
         <div className="flex itmes-center justify-center mt-5">
           <form

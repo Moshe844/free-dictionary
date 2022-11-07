@@ -10,7 +10,7 @@ function Reset() {
   const navigate = useNavigate();
   useEffect(() => {
     if (loading) return;
-    if (user) navigate("/dashboard");
+    if (user) navigate("/reset");
   }, [user, loading, navigate, error]);
   return (
     <div className="reset">
