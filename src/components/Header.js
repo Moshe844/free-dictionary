@@ -4,6 +4,7 @@ import { getWordSuggestions } from "../api/getWordSuggestions";
 import WordItem from "./WordItem";
 import { Link } from "react-router-dom";
 import "./Header.css";
+import { UserContext } from "../Context/User.context";
 
 const Header = () => {
   const [value, setValue] = useState("");
@@ -13,6 +14,7 @@ const Header = () => {
     suggestionsState: [],
   });
   const { inputValue, setInputValue } = useContext(InputContext);
+  const { currentUser, setCurrentUser } = useContext(UserContext);
 
   const handleSubmit = (word) => {
     const index = searchSuggestions.suggestionsState.indexOf("active");
@@ -90,14 +92,17 @@ const Header = () => {
   return (
     <div className="bg-gray-700">
       <div className="nav">
-        <div className="nav-Link">
-          <Link to="/login">Login</Link>
-        </div>
-        <div className="nav-Link">
-          <Link to="/register">Signup</Link>
-        </div>
-
-        <div className="nav-Link">signOut</div>
+        {!currentUser?.emailVarifed ? (
+          <>
+            <Link to="/login" className="nav-Link">
+              Login
+            </Link>
+            {/* <div className="nav-Link">Login</div> */}
+            <div className="nav-Link">Signup</div>
+          </>
+        ) : (
+          <div className="nav-Link">signOut</div>
+        )}
       </div>
 
       <div className="container mx auto py-8">

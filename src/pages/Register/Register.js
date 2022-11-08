@@ -99,7 +99,7 @@ function Register() {
             value={password}
             valueAgain={confirmPassword}
           />
-
+          <reCAPTCHA />
           <button type="submit">Register</button>
         </form>
         <span>
