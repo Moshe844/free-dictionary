@@ -98,10 +98,10 @@ const Header = () => {
               Login
             </Link>
             {/* <div className="nav-Link">Login</div> */}
-            <div className="nav-Link">Signup</div>
+            <Link to={'/register'} className="nav-Link">Signup</Link>
           </>
         ) : (
-          <div className="nav-Link">signOut</div>
+          <button className="nav-Link">signOut</button>
         )}
       </div>
 
