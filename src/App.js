@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, Outlet } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/login/Login";
 import Profile from "./pages/Profile";
@@ -24,30 +24,32 @@ function App() {
   return (
     <AuthProvider value={{ currentUser, timeActive, setTimeActive }}>
       <Routes>
-        <Route path="/" element={<Home />}></Route>
-        <Route path="/profile" element={<Profile />} />
-        <Route
-          path="/login"
-          element={
-            !currentUser?.emailVerified ? (
-              <Login />
-            ) : (
-              <Navigate to="/" replace />
-            )
-          }
-        />
-        <Route
-          path="/register"
-          element={
-            !currentUser?.emailVerified ? (
-              <Register />
-            ) : (
-              <Navigate to="/" replace />
-            )
-          }
-        />
-        <Route path="/verify-email" element={<VerifyEmail />} />
-        <Route exact path="/reset" element={<Reset />} />
+        <Route path="/" element={<Outlet />}>
+          <Route exact path="/" element={<Home />}></Route>
+          <Route path="/profile" element={<Profile />} />
+          <Route
+            path="/login"
+            element={
+              !currentUser?.emailVerified ? (
+                <Login />
+              ) : (
+                <Navigate to="/" replace />
+              )
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              !currentUser?.emailVerified ? (
+                <Register />
+              ) : (
+                <Navigate to="/" replace />
+              )
+            }
+          />
+          <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route exact path="/reset" element={<Reset />} />
+        </Route>
       </Routes>
     </AuthProvider>
   );

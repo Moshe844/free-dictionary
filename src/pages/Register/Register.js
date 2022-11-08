@@ -9,6 +9,7 @@ import {
 
 import PasswordChecklist from "react-password-checklist";
 import { useAuthValue } from "../AuthContext";
+import reCAPTCHA from "react-google-recaptcha";
 
 function Register() {
   const [name, setName] = useState("");
