@@ -87,17 +87,15 @@ const Header = () => {
     if (value) handleSuggestions(value);
   }, [value]);
 
-  //first fix the position of the login container
 
   return (
     <div className="bg-gray-700">
       <div className="nav">
-        {!currentUser?.emailVarifed ? (
+        {!currentUser?.emailVerified ? (
           <>
             <Link to="/login" className="nav-Link">
               Login
             </Link>
-            {/* <div className="nav-Link">Login</div> */}
             <Link to={'/register'} className="nav-Link">Signup</Link>
           </>
         ) : (

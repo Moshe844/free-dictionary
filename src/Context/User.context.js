@@ -1,12 +1,21 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../pages/firebase';
 
 export const UserContext = createContext({
   currentUser: null,
-  setCurrentUser: () => null,
 });
 
-export const IndexProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState("");
-  const user = { currentUser, setCurrentUser };
-  return <UserContext.Provider user={user}>{children}</UserContext.Provider>;
+export const UserProvider = ({ children }) => {
+  const [currentUser, setCurrentUser] = useState(null);
+  const value = { currentUser };
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      console.log(user);
+      setCurrentUser(user);
+      console.log({ currentUser });
+    });
+  }, []);
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
