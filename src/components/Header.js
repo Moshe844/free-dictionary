@@ -1,13 +1,15 @@
-import { useContext, useEffect, useState } from "react";
-import { InputContext } from "../Context/Input.context";
-import { getWordSuggestions } from "../api/getWordSuggestions";
-import WordItem from "./WordItem";
-import { Link } from "react-router-dom";
-import "./Header.css";
-import { UserContext } from "../Context/User.context";
+import { useContext, useEffect, useState } from 'react';
+import { InputContext } from '../Context/Input.context';
+import { getWordSuggestions } from '../api/getWordSuggestions';
+import WordItem from './WordItem';
+import { Link } from 'react-router-dom';
+import './Header.css';
+import { UserContext } from '../Context/User.context';
+import { signOut } from 'firebase/auth';
+import { auth } from '../pages/firebase';
 
 const Header = () => {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(true);
   const [searchSuggestions, setSearchSuggestions] = useState({
     suggestions: [],
@@ -17,9 +19,9 @@ const Header = () => {
   const { currentUser, setCurrentUser } = useContext(UserContext);
 
   const handleSubmit = (word) => {
-    const index = searchSuggestions.suggestionsState.indexOf("active");
+    const index = searchSuggestions.suggestionsState.indexOf('active');
     setInputValue(searchSuggestions.suggestions[index]);
-    setValue("");
+    setValue('');
     setSearchSuggestions({
       suggestions: [],
       suggestionsState: [],
@@ -48,8 +50,8 @@ const Header = () => {
 
   const handleSuggestions = async (value) => {
     const suggestions = await getWordSuggestions(value);
-    const suggestionsState = Array(suggestions.length).fill("inActive", 1);
-    suggestionsState[0] = "active";
+    const suggestionsState = Array(suggestions.length).fill('inActive', 1);
+    suggestionsState[0] = 'active';
     setSearchSuggestions({
       suggestions: suggestions,
       suggestionsState: suggestionsState,
@@ -57,21 +59,21 @@ const Header = () => {
     console.log(suggestions);
     console.log(suggestionsState);
     let onArrowPress = 0;
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowDown") {
-        if (typeof suggestionsState[onArrowPress + 1] !== "undefined") {
-          suggestionsState[onArrowPress + 1] = "active";
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown') {
+        if (typeof suggestionsState[onArrowPress + 1] !== 'undefined') {
+          suggestionsState[onArrowPress + 1] = 'active';
           if (onArrowPress >= 0) {
-            suggestionsState[onArrowPress] = "inActive";
+            suggestionsState[onArrowPress] = 'inActive';
           }
           onArrowPress++;
         }
       }
-      if (e.key === "ArrowUp") {
-        if (typeof suggestionsState[onArrowPress - 1] !== "undefined") {
-          suggestionsState[onArrowPress - 1] = "active";
+      if (e.key === 'ArrowUp') {
+        if (typeof suggestionsState[onArrowPress - 1] !== 'undefined') {
+          suggestionsState[onArrowPress - 1] = 'active';
           if (onArrowPress - 1 >= 0) {
-            suggestionsState[onArrowPress] = "inActive";
+            suggestionsState[onArrowPress] = 'inActive';
           }
           onArrowPress--;
         }
@@ -87,7 +89,6 @@ const Header = () => {
     if (value) handleSuggestions(value);
   }, [value]);
 
-
   return (
     <div className="bg-gray-700">
       <div className="nav">
@@ -96,10 +97,15 @@ const Header = () => {
             <Link to="/login" className="nav-Link">
               Login
             </Link>
-            <Link to={'/register'} className="nav-Link">Signup</Link>
+            <Link to={'/register'} className="nav-Link">
+              Signup
+            </Link>
           </>
         ) : (
-          <button className="nav-Link">signOut</button>
+          // <span className="cursor-pointer" onClick={() => signOut(auth)}>
+          //   Sign Out
+          // </span>
+          <div></div>
         )}
       </div>
 
@@ -108,17 +114,14 @@ const Header = () => {
           My Free Dictionary
         </h1> */}
 
-        <p className="text-center mt-1 mb-10 text-white text-lg">
-          Find Definitions for word
-        </p>
+        <p className="text-center mt-1 mb-10 text-white text-lg">Find Definitions for word</p>
 
         <div className="flex itmes-center justify-center mt-5">
           <form
             className="LOOK relative flex border-2 border-gray-200 rounded"
             onSubmit={handleShowResult}
             onFocus={() => setInputValue(false)}
-            onBlur={() => setIsDropdownOpen(false)}
-          >
+            onBlur={() => setIsDropdownOpen(false)}>
             <input
               className="pw-96 px-4 py-2 md:w-80"
               type="text"
@@ -126,9 +129,7 @@ const Header = () => {
               onChange={handleInputChange}
               value={value}
             />
-            <button className="bg-blue-400 border-l px-4 py-2 text-white">
-              Search
-            </button>
+            <button className="bg-blue-400 border-l px-4 py-2 text-white">Search</button>
             {isDropdownOpen === true && (
               <div className="word-suggestion-dropdown should-be-in-a-container absolute top-full bg-gray-50 w-full z-10">
                 {searchSuggestions.suggestions.map((word, onArrowPress) => {
@@ -136,9 +137,7 @@ const Header = () => {
                     <WordItem
                       key={word}
                       word={word}
-                      addedClassname={
-                        searchSuggestions.suggestionsState[onArrowPress]
-                      }
+                      addedClassname={searchSuggestions.suggestionsState[onArrowPress]}
                       handleClick={handleSubmit}
                     />
                   );
@@ -149,8 +148,7 @@ const Header = () => {
         </div>
         {inputValue && (
           <h3 className="text-gray-50 text-center mt-4">
-            Results for:{" "}
-            <span className="text-white font-bold">{inputValue}</span>
+            Results for: <span className="text-white font-bold">{inputValue}</span>
           </h3>
         )}
       </div>

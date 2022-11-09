@@ -1,19 +1,16 @@
-import "../forms.css";
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import {
-  signInWithEmailAndPassword,
-  sendEmailVerification,
-} from "firebase/auth";
+import '../forms.css';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { signInWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 
-import { useNavigate } from "react-router-dom";
-import { useAuthValue } from "../AuthContext";
-import { auth } from "../firebase";
+import { useNavigate } from 'react-router-dom';
+import { useAuthValue } from '../AuthContext';
+import { auth } from '../firebase';
 
 function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const { setTimeActive } = useAuthValue();
   const navigate = useNavigate();
 
@@ -25,37 +22,36 @@ function Login() {
           sendEmailVerification(auth.currentUser)
             .then(() => {
               setTimeActive(true);
-              navigate("/verify-email");
+              navigate('/verify-email');
             })
             .catch((err) => alert(err.message));
         } else {
-          navigate("/");
+          navigate('/');
         }
       })
-      .catch((err) => setError(err.message));
-    // .catch((err) => {
-    //   switch (err.code) {
+      // .catch((err) => setError(err.message));
+      .catch((err) => {
+        switch (err.code) {
+          case 'auth/wrong-password':
+            setError('Invalid password');
+            break;
 
-    //     case "auth/wrong-password":
-    //       setError("Invalid password");
-    //       break;
+          case 'auth/user-not-found':
+            setError('Email not found');
+            break;
 
-    //     case "auth/user-not-found":
-    //       setError("Email not found");
-    //       break;
-
-    //     default:
-    //       console.log(err.message);
-    //       console.log(err.code);
-    //       break;
-    //   }
-    // });
+          default:
+            console.log(err.message);
+            console.log(err.code);
+            break;
+        }
+      });
   };
 
   return (
-    <div className="center">
+    <div className=" center-it center">
       <div className="auth">
-        <h1>Log in</h1>
+        <h1 className="">Log in</h1>
         {error && <div className="auth__error">{error}</div>}
         <form onSubmit={login} name="login_form">
           <input
