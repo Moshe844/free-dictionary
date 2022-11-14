@@ -10,6 +10,7 @@ import { useContext, useState } from 'react';
 import { AuthProvider } from './pages/AuthContext';
 import Reset from './pages/Reset';
 import { UserContext } from './Context/User.context';
+import Header from './components/Header';
 
 function App() {
   const { currentUser } = useContext(UserContext);
@@ -17,15 +18,15 @@ function App() {
 
   return (
     <AuthProvider value={{ timeActive, setTimeActive }}>
+      <Header />
       <Routes>
-        <Route path="/" element={<Outlet />}>
-          <Route exact path="/" element={<Home />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/login" element={!currentUser?.emailVerified ? <Login /> : <Navigate to="/" replace />} />
-          <Route path="/register" element={!currentUser?.emailVerified ? <Register /> : <Navigate to="/" replace />} />
-          <Route path="/verify-email" element={<VerifyEmail />} />
-          <Route exact path="/reset" element={<Reset />} />
-        </Route>
+        <Route path="/" element={<Home />} />
+        {/* <Route path="/" element={<Outlet />}> */}
+        <Route path="profile" element={<Profile />} />
+        <Route path="login" element={!currentUser?.emailVerified ? <Login /> : <Profile />} />
+        <Route path="register" element={!currentUser?.emailVerified ? <Register /> : <Navigate to="/" replace />} />
+        <Route path="verify-email" element={<VerifyEmail />} />
+        <Route exact path="reset" element={<Reset />} />
       </Routes>
     </AuthProvider>
   );

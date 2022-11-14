@@ -26,7 +26,7 @@ function Login() {
             })
             .catch((err) => alert(err.message));
         } else {
-          navigate('/');
+          navigate('/profile');
         }
       })
       // .catch((err) => setError(err.message));

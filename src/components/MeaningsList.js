@@ -1,5 +1,4 @@
 const MeaningsList = ({ mean }) => {
-  console.log(mean);
   return (
     <div>
       {mean.map((val) =>

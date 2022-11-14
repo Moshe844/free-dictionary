@@ -23,3 +23,8 @@
 .verifyEmail > button {
   margin-top: 35px;
 }
+
+.verify-email-center {
+  margin-top: 150px;
+  margin-left: 520px;
+}

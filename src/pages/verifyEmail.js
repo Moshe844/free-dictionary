@@ -1,9 +1,9 @@
-import "./verifyEmail.css";
-import { useAuthValue } from "./AuthContext";
-import { useState, useEffect } from "react";
-import { auth } from "./firebase";
-import { sendEmailVerification } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import './verifyEmail.css';
+import { useAuthValue } from './AuthContext';
+import { useState, useEffect } from 'react';
+import { auth } from './firebase';
+import { sendEmailVerification } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
 
 function VerifyEmail() {
   const { currentUser } = useAuthValue();
@@ -18,7 +18,7 @@ function VerifyEmail() {
         .then(() => {
           if (currentUser?.emailVerified) {
             clearInterval(interval);
-            navigate("/");
+            navigate('/');
           }
         })
         .catch((err) => {
@@ -52,13 +52,13 @@ function VerifyEmail() {
   };
 
   return (
-    <div className="center">
+    <div className=" verify-email-center center">
       <div className="verifyEmail">
         <h1>Verify your Email Address</h1>
         <p>
           <strong>A Verification email has been sent to:</strong>
           <br />
-          <span>{currentUser?.email}</span>
+          <span>{auth.currentUser?.email}</span>
         </p>
         <span>Follow the instruction in the email to verify your account</span>
         <button onClick={resendEmailVerification} disabled={timeActive}>

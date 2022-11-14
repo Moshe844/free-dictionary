@@ -1,31 +1,31 @@
-import { useState } from "react";
-import "../forms.css";
-import { auth } from "../firebase";
-import { useNavigate, Link } from "react-router-dom";
-import {
-  createUserWithEmailAndPassword,
-  sendEmailVerification,
-} from "firebase/auth";
+import { useState } from 'react';
+import '../forms.css';
+import { auth } from '../firebase';
+import { useNavigate, Link } from 'react-router-dom';
+import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 
-import PasswordChecklist from "react-password-checklist";
-import { useAuthValue } from "../AuthContext";
-import reCAPTCHA from "react-google-recaptcha";
+import PasswordChecklist from 'react-password-checklist';
+import { useAuthValue } from '../AuthContext';
+import ReCAPTCHA from 'react-google-recaptcha';
+import React, { useRef } from 'react';
 
 function Register() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
   const { setTimeActive } = useAuthValue();
 
+  const captchaRef = useRef(null);
+
   const validatePassword = () => {
     let isValid = true;
-    if (password !== "" && confirmPassword !== "") {
+    if (password !== '' && confirmPassword !== '') {
       if (password !== confirmPassword) {
         isValid = false;
-        setError("Passwords does not match");
+        setError('Passwords does not match');
       }
     }
     return isValid;
@@ -33,28 +33,43 @@ function Register() {
 
   const register = (e) => {
     e.preventDefault();
-    setError("");
+
+    captchaRef.current.reset();
+    setError('');
     if (validatePassword()) {
       // Create a new user with email and password using firebase
-      createUserWithEmailAndPassword(auth, email, password)
+      createUserWithEmailAndPassword(auth, email, password, name)
         .then(() => {
           sendEmailVerification(auth.currentUser)
             .then(() => {
               setTimeActive(true);
-              navigate("/verify-email");
+              navigate('/verify-email');
             })
             .catch((err) => alert(err.message));
         })
-        .catch((err) => setError(err.message));
+        // .catch((err) => setError(err.message));
+        .catch((err) => {
+          switch (err.code) {
+            case 'auth/email-already-in-use':
+              setError('Email already in use');
+              break;
+
+            default:
+              console.log(err.message);
+              console.log(err.code);
+              break;
+          }
+        });
     }
-    setName("");
-    setEmail("");
-    setPassword("");
-    setConfirmPassword("");
+
+    setName('');
+    setEmail('');
+    setPassword('');
+    setConfirmPassword('');
   };
 
   return (
-    <div className="center">
+    <div className="center-it center">
       <div className="auth">
         <h1>Register</h1>
         {error && <div className="auth__error">{error}</div>}
@@ -94,12 +109,12 @@ function Register() {
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
           <PasswordChecklist
-            rules={["minLength", "specialChar", "number", "capital", "match"]}
+            rules={['minLength', 'specialChar', 'number', 'capital', 'match']}
             minLength={5}
             value={password}
             valueAgain={confirmPassword}
           />
-          <reCAPTCHA />
+          <ReCAPTCHA sitekey="6LfovekiAAAAAMVcSiw_Pl6lLXsXZ4YKzDu5OJhr" ref={captchaRef} />
           <button type="submit">Register</button>
         </form>
         <span>
